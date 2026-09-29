@@ -116,7 +116,15 @@ function App() {
 
             {scanStatus.status === 'completed' && (
               <div>
-                <h3 className="text-xl font-bold mb-4 border-b border-slate-700 pb-2">Vulnerabilities Found: {scanStatus.findings.length}</h3>
+                <div className="flex justify-between items-center mb-4 border-b border-slate-700 pb-2">
+                  <h3 className="text-xl font-bold">Vulnerabilities Found: {scanStatus.findings.length}</h3>
+                  <button 
+                    onClick={() => window.open(`http://localhost:8000/scans/${scanId}/report`, '_blank')}
+                    className="bg-blue-600 hover:bg-blue-500 text-white text-sm font-bold py-2 px-4 rounded shadow-lg transform transition hover:-translate-y-0.5"
+                  >
+                    Download PDF Report
+                  </button>
+                </div>
                 <div className="space-y-6 mt-4">
                   {scanStatus.findings.map((f, i) => (
                     <div key={i} className="bg-slate-900 rounded-lg p-5 border border-red-500/30 shadow-inner">

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, UploadFile, File, BackgroundTasks, HTTPException
+from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uuid
@@ -7,6 +8,7 @@ from typing import Dict
 from .models import ScanReport, Endpoint
 from .parser import parse_postman_collection
 from .orchestrator import run_all_tests
+from .report_generator import generate_pdf_report
 
 app = FastAPI(title="APIShield Backend")
 
@@ -68,4 +70,10 @@ def get_scan_status(scan_id: str):
 def get_scan_report(scan_id: str):
     if scan_id not in scans_db:
         raise HTTPException(status_code=404, detail="Scan not found")
-    return scans_db[scan_id]
+    report_data = scans_db[scan_id]
+    pdf_bytes = generate_pdf_report(report_data)
+    return Response(
+        content=pdf_bytes, 
+        media_type="application/pdf", 
+        headers={"Content-Disposition": f"attachment; filename=report_{scan_id}.pdf"}
+    )
