@@ -9,15 +9,15 @@ async def run_sqli_test(endpoint: Endpoint, client: httpx.AsyncClient) -> Findin
     url = endpoint.url
     method = endpoint.method
     
-    # We will test URL params for now
-    if not endpoint.query_params and "search" not in url:
+    if "search" not in url.lower() and not endpoint.query_params:
         return None
         
     # Append a single quote to the URL
     if "?" in url:
         test_url = url + "%27" # url encoded '
     else:
-        test_url = url + "?q=%27"
+        # Use 'name' for the demo API specifically
+        test_url = url + "?name=test%27"
         
     try:
         if method == "GET":
