@@ -45,3 +45,8 @@ uvicorn main:app --reload --port 8001
 
 ## Status
 Active Development & Security Enhancements
+
+## Future Roadmap
+- JWT Token Validation Scanner
+- Automated HTML Vulnerability Reports
+
