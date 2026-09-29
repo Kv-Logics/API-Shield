@@ -16,18 +16,17 @@ async def run_sqli_test(endpoint: Endpoint, client: httpx.AsyncClient) -> Findin
     if "?" in url:
         test_url = url + "%27" # url encoded '
     else:
-        # Use 'name' for the demo API specifically
-        test_url = url + "?name=test%27"
+        test_url = url + "?q=test%27"
         
     try:
         if method == "GET":
             res = await client.get(test_url, headers=endpoint.headers)
             
         body = res.text.lower()
-        # Look for common SQL error signatures
-        sql_errors = ["syntax error", "sqlite3.error", "unclosed quotation mark", "sql syntax"]
+        # Look for common SQL error signatures or just a 500 error triggered by the payload
+        sql_errors = ["syntax error", "sqlite3", "unclosed quotation mark", "sql syntax", "unrecognized token", "internal server error"]
         
-        if any(err in body for err in sql_errors):
+        if res.status_code == 500 or any(err in body for err in sql_errors):
             return Finding(
                 endpoint=url,
                 method=method,
