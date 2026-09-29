@@ -6,6 +6,7 @@ from .tests_engine.idor import run_idor_test
 from .tests_engine.rate_limit import run_rate_limit_test
 from .tests_engine.sensitive_data import run_sensitive_data_test
 from .tests_engine.sqli import run_sqli_test
+from .tests_engine.cors_scanner import run_cors_test
 
 async def run_all_tests(endpoints: List[Endpoint]) -> List[Finding]:
     findings = []
@@ -26,5 +27,8 @@ async def run_all_tests(endpoints: List[Endpoint]) -> List[Finding]:
             
             f5 = await run_sqli_test(ep, client)
             if f5: findings.append(f5)
+            
+            f6 = await run_cors_test(ep, client)
+            if f6: findings.append(f6)
             
     return findings
