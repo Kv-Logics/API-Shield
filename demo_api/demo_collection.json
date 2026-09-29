@@ -1,0 +1,47 @@
+{
+	"info": {
+		"name": "Demo API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Protected Data",
+			"request": {
+				"method": "GET",
+				"header": [{"key": "Authorization", "value": "Bearer token_alice"}],
+				"url": {"raw": "http://localhost:8001/api/protected", "host": ["localhost"], "port": "8001", "path": ["api", "protected"]}
+			}
+		},
+		{
+			"name": "Get Grades (IDOR)",
+			"request": {
+				"method": "GET",
+				"header": [{"key": "Authorization", "value": "Bearer token_alice"}],
+				"url": {"raw": "http://localhost:8001/api/grades?student_id=1", "host": ["localhost"], "port": "8001", "path": ["api", "grades"], "query": [{"key": "student_id", "value": "1"}]}
+			}
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [{"key": "Content-Type", "value": "application/json"}],
+				"body": {"mode": "raw", "raw": "{\"username\":\"alice\",\"password\":\"password123\"}"},
+				"url": {"raw": "http://localhost:8001/login", "host": ["localhost"], "port": "8001", "path": ["login"]}
+			}
+		},
+		{
+			"name": "User Profile (Sensitive Data)",
+			"request": {
+				"method": "GET",
+				"url": {"raw": "http://localhost:8001/api/users/1", "host": ["localhost"], "port": "8001", "path": ["api", "users", "1"]}
+			}
+		},
+		{
+			"name": "Search Users (SQLi)",
+			"request": {
+				"method": "GET",
+				"url": {"raw": "http://localhost:8001/api/search?q=alice", "host": ["localhost"], "port": "8001", "path": ["api", "search"], "query": [{"key": "q", "value": "alice"}]}
+			}
+		}
+	]
+}
